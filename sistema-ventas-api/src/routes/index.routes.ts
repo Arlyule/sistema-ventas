@@ -28,7 +28,7 @@ class IndexRoutes {
          *          200:
         *              description: Exitoso
          */
-        this.router.get('/', authRules(), [validate], IndexCotroller.index);
+        this.router.get('/', IndexCotroller.index);
         /**
          * @swagger
          * /api:

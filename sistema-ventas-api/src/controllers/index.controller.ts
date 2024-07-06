@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import prisma from "../database/datadase";
+import { utils } from "../utils/utils";
 
 
 class IndexController {
@@ -8,14 +9,18 @@ class IndexController {
         try {
             const usuarios = await prisma.usuario.findMany();
             // return res.json({ message: "API Works" });
-            const newUser = await prisma.usuario.create({
-                data: {
-                    nombre: "Marisol",
-                    apellidos: "nuñez",
-                    username: "marisol02",
-                    password: "linux",
-                },
-            });
+            // const user = {
+            //     nombre: "Samuel",
+            //     apellidos: "Torres",
+            //     username: "samuel01",
+            //     password: "linux",
+
+            // };
+            // const token = utils.generateJWT(user);
+            // console.log(token);
+            // var jwt = 'eyJhbGciOiJIUzI1NiIsInR5 cCI6IkpXVCJ9.eyJub21icmUiOiJTYW11ZWwiLCJhcGVsbGlkb3MiOiJUb3JyZXMiLCJ1c2VybmFtZSI6InNhbXVlbDAxIiwicGFzc3dvcmQiOiJsaW51eCIsImlhdCI6MTcyMDIyODIwOCwiZXhwIjoxNzIwMjMxODA4fQ.ZHvIiGU0ye_obLNrwaV8VDmytL_URDRmouoByDX0AcQ'
+            // var data = utils.getPayload(jwt);
+            // console.log(data);
             return res.json(usuarios);
         } catch (error: any) {
             return res.status(500).json({ message: `Error ${error.message}` });
