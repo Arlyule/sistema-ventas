@@ -18,18 +18,20 @@ class AuthController {
                 return res.status(404).json({ message: 'El usuario y/o contraseña son incorrectos' });
             }
 
-            // * Verificar la contraseña
+            // Verificar la contraseña
             if (await utils.checkPassword(password, usuario.password)) {
 
-                // * Si la contraseña es correcta generar el payload con la información
+                // Si la contraseña es correcta generar el payload con la información
                 const { password, fecharegistro, ...newUser } = usuario;
 
-                // * Generar el jwt
+                //Generar el jwt
                 const token = utils.generateJWT(newUser);
 
-                // * Eviar el jwt
+                // Enviar el jwt
                 res.json({ message: 'Autentificación correcta', token })
 
+            } else {
+                return res.status(404).json({ message: 'El usuario y/o contraseña son incorrectos' });
             }
         } catch (error) {
             return res.status(500).json({ message: 'Error interno' });

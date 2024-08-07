@@ -7,7 +7,6 @@ class IndexController {
 
     public async index(req: Request, res: Response) {
         try {
-            const usuarios = await prisma.usuario.findMany();
             // return res.json({ message: "API Works" });
             // const user = {
             //     nombre: "Samuel",
@@ -21,7 +20,7 @@ class IndexController {
             // var jwt = 'eyJhbGciOiJIUzI1NiIsInR5 cCI6IkpXVCJ9.eyJub21icmUiOiJTYW11ZWwiLCJhcGVsbGlkb3MiOiJUb3JyZXMiLCJ1c2VybmFtZSI6InNhbXVlbDAxIiwicGFzc3dvcmQiOiJsaW51eCIsImlhdCI6MTcyMDIyODIwOCwiZXhwIjoxNzIwMjMxODA4fQ.ZHvIiGU0ye_obLNrwaV8VDmytL_URDRmouoByDX0AcQ'
             // var data = utils.getPayload(jwt);
             // console.log(data);
-            return res.json(usuarios);
+            return res.json({ message: 'API Works!' });
         } catch (error: any) {
             return res.status(500).json({ message: `Error ${error.message}` });
         }

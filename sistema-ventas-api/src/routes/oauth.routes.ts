@@ -26,7 +26,7 @@ class AuthRoutes {
 
         /**
          * @swagger
-         * /api/oauth:
+         * /api/auth:
          *  post:
          *      tags: ["Credenciales"]
          *      summary: Log In
