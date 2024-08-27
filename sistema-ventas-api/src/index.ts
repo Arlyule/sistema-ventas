@@ -4,6 +4,9 @@ import cors from 'cors';
 import swaggerUI from 'swagger-ui-express';
 import swaggerDocs from './routes/api.docs';
 import indexRoutes from './routes/index.routes';
+import authRouter from './routes/oauth.routes';
+import userRoutes from './routes/user.routes';
+import generalRoutes from './routes/general.routes';
 
 class Server {
 
@@ -37,6 +40,9 @@ class Server {
     private route(): void {
         this.app.use('/api/docs', swaggerUI.serve, swaggerUI.setup(swaggerDocs));
         this.app.use('/api', indexRoutes);
+        this.app.use('/api/auth', authRouter);
+        this.app.use('/api/users', userRoutes);
+        this.app.use("/api/general", generalRoutes);
     }
 
     //TODO: Generar un metodo para la inizializacion del proyecto
