@@ -1,11 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
-import { Router } from '@angular/router';
 import { BehaviorSubject, catchError, map, throwError } from 'rxjs';
 import { environment } from '../../../../environments/environment.development';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { isPlatformBrowser } from '@angular/common';
+import { Router } from '@angular/router';
 
 const helper = new JwtHelperService();
 
@@ -13,8 +13,9 @@ const helper = new JwtHelperService();
   providedIn: 'root',
 })
 export class AuthService {
-  private token = new BehaviorSubject<String>('');
-  private tokenData = new BehaviorSubject<String | null>('');
+
+  private token = new BehaviorSubject<String>("");
+  private tokenData = new BehaviorSubject<any>({});
   private isLogged = new BehaviorSubject<boolean>(false);
 
   constructor(
@@ -31,7 +32,7 @@ export class AuthService {
   }
 
   get tokenValue() {
-    return this.tokenData.getValue();
+    return this.token.getValue();
   }
 
   get tokenData$() {
@@ -43,73 +44,72 @@ export class AuthService {
   }
 
   login(loginData: any) {
-    return this.http.post(`${environment.API_URL}/auth`, loginData).pipe(
-      map((data: any) => {
+    return this.http.post(`${environment.API_URL}/auth`, loginData)
+      .pipe(map((data: any) => {
         if (data.token) {
           this.saveLocalStorage(data.token);
           this.token.next(data.token);
           this.isLogged.next(true);
           this.checkToken();
+
           this.router.navigate(['/home']);
         }
 
         return data;
       }),
-
-      catchError((error) => this.handlerError(error))
-    );
+        catchError((error) => this.handlerError(error)));
   }
 
   saveLocalStorage(token: string) {
-    if (isPlatformBrowser(this.platformId)) {
-      localStorage.setItem('jwt', token);
-    }
+    localStorage.setItem("jwt", token);
   }
 
   logOut() {
     if (isPlatformBrowser(this.platformId)) {
-      localStorage.removeItem('jwt');
+      localStorage.removeItem("jwt");
     }
-
-    this.token.next('');
+    this.token.next("");
     this.tokenData.next(null);
     this.isLogged.next(false);
+
+    this.router.navigate(['/home']);
   }
 
   checkToken() {
+    var token: string | null = "";
     if (isPlatformBrowser(this.platformId)) {
-      const token = localStorage.getItem('jwt');
+      token = localStorage.getItem("jwt");
+    }
 
-      if (token) {
-        const isExpired = helper.isTokenExpired(token);
-        if (isExpired) {
-          this.logOut();
-        } else {
-          this.token.next(token);
-
-          const { iat, exp, ...data } = helper.decodeToken(token);
-
-          this.tokenData.next(data);
-          this.isLogged.next(true);
-        }
-      } else {
+    if (token) {
+      const isExpired = helper.isTokenExpired(token);
+      if (isExpired)
         this.logOut();
+      else {
+        this.token.next(token);
+
+        // Renovamos los datos del usuario
+        const { iat, exp, ...data } = helper.decodeToken(token);
+        this.tokenData.next(data);
+        this.isLogged.next(true);
       }
+    } else {
+      this.logOut();
     }
   }
 
   private handlerError(error: any) {
-    var errorMessage = 'Ocurrió un error';
-
+    console.log(error);
+    var message = "Ocurrió un error";
     if (error.error) {
-      if (error.error.message) errorMessage = error.error.message;
-      else errorMessage = 'Ocurrió un error';
+      if (error.error.message) message = error.error.message;
+      else message = 'Ocurrió un error';
     }
 
-    this.snackBar.open(errorMessage, '', { duration: 3000 });
-
-    return throwError(() => {
-      new Error(errorMessage);
+    this.snackBar.open(message, '', {
+      duration: 3000
     });
+
+    return throwError(() => new Error(message));
   }
 }

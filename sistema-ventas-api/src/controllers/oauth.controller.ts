@@ -37,6 +37,12 @@ class AuthController {
             return res.status(500).json({ message: 'Error interno' });
         }
     }
+
+    sleep(ms: number) {
+        return new Promise((resolve) => {
+            setTimeout(resolve, ms);
+        });
+    }
 }
 
 export const authController = new AuthController();

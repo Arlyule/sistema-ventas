@@ -1,25 +1,77 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url      = "postgresql://postgres:tfxQTR987xi@sistema-ventas-db.c5iweq2mi3lo.us-east-1.rds.amazonaws.com:5432/sistema-ventas-db?schema=public"
 }
 
-model Usuario {
-  cveusuario    Int      @id @default(autoincrement())
-  nombre        String   @db.VarChar(250)
-  apellidos     String   @db.VarChar(250)
-  username      String   @db.VarChar(250)
-  password      String   @db.VarChar(250)
+model categoria {
+  cvecategoria Int        @id @default(autoincrement()) @db.SmallInt
+  descripcion  String     @db.VarChar(250)
+  activo       Boolean
+  producto     producto[]
+
+  @@map("categoria")
+}
+
+model detalle_venta {
+  cvedetalleventa Int      @id @default(autoincrement()) @db.SmallInt
+  cantidad        Int
+  precioproducto  Decimal  @db.Decimal
+  cveproducto     Int      @db.SmallInt
+  cveventa        Int      @db.SmallInt
+  producto        producto @relation(fields: [cveproducto], references: [cveproducto], onDelete: NoAction, onUpdate: NoAction)
+  venta           venta    @relation(fields: [cveventa], references: [cveventa], onDelete: NoAction, onUpdate: NoAction)
+
+  @@map("detalle_venta")
+}
+
+model producto {
+  cveproducto   Int             @id @default(autoincrement()) @db.SmallInt
+  descripcion   String          @db.VarChar(350)
+  precio        Decimal         @db.Decimal
+  cantidad      Int?
+  cvecategoria  Int             @db.SmallInt
+  detalle_venta detalle_venta[]
+  categoria     categoria       @relation(fields: [cvecategoria], references: [cvecategoria], onDelete: NoAction, onUpdate: NoAction)
+
+  @@map("producto")
+}
+
+model rol {
+  cverol      Int       @id @default(autoincrement()) @db.SmallInt
+  descripcion String    @db.VarChar(250)
+  clave       String?   @db.VarChar(45)
+  activo      Boolean
+  usuario     usuario[]
+
+  @@map("rol")
+}
+
+model usuario {
+  cveusuario    Int      @id @default(autoincrement()) @db.SmallInt
+  nombre        String   @db.VarChar(350)
+  apellidos     String   @db.VarChar(450)
+  username      String   @db.VarChar(150)
+  password      String   @db.VarChar(350)
   fecharegistro DateTime @default(now())
 
-  @@map("tbl_usuario")
+  cverol Int     @db.SmallInt
+  rol    rol     @relation(fields: [cverol], references: [cverol], onDelete: NoAction, onUpdate: NoAction)
+  venta  venta[]
+
+  @@map("usuario")
+}
+
+model venta {
+  cveventa      Int             @id @default(autoincrement()) @db.SmallInt
+  totalventa    Decimal         @db.Decimal
+  fechaventa    DateTime        @db.Timestamp(6)
+  cveusuario    Int             @db.SmallInt
+  detalle_venta detalle_venta[]
+  usuario       usuario         @relation(fields: [cveusuario], references: [cveusuario], onDelete: NoAction, onUpdate: NoAction)
+
+  @@map("venta")
 }

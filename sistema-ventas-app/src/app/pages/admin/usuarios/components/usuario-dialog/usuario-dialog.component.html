@@ -1,0 +1,56 @@
+<h1 mat-dialog-title>Usuario</h1>
+<mat-dialog-content>
+  <form [formGroup]="userForm" (ngSubmit)="onSave()">
+    <mat-form-field class="full-width">
+      <mat-label>Nombre</mat-label>
+      <input type="text" formControlName="nombre" matInput />
+      <mat-error>
+        {{ baseForm.getErrorMessage(userForm.get("nombre")) }}
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field class="full-width">
+      <mat-label>apellidos</mat-label>
+      <input type="text" formControlName="apellidos" matInput />
+      <mat-error>
+        {{ baseForm.getErrorMessage(userForm.get("apellidos")) }}
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field class="full-width">
+      <mat-label>username</mat-label>
+      <input type="text" formControlName="username" matInput />
+      <mat-error>
+        {{ baseForm.getErrorMessage(userForm.get("username")) }}
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field class="full-width" appearance="outline">
+      <mat-label>Rol(es)</mat-label>
+      <mat-select formControlName="cverol">
+        <mat-option *ngFor="let rol of roles" [value]="rol.cverol">
+          {{ rol.descripcion + " - " + rol.clave }}
+        </mat-option>
+      </mat-select>
+      <mat-error>
+        {{ baseForm.getErrorMessage(userForm.get("cverol")) }}
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field *ngIf="actionTodo == 'new'" class="full-width">
+      <mat-label>password</mat-label>
+      <input type="text" formControlName="password" matInput />
+      <mat-error>
+        {{ baseForm.getErrorMessage(userForm.get("password")) }}
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field *ngIf="actionTodo == 'new'" class="full-width">
+      <mat-label>confirmPassword</mat-label>
+      <input type="text" formControlName="confirmPassword" matInput />
+      <mat-error>
+        {{ baseForm.getErrorMessage(userForm.get("confirmPassword")) }}
+      </mat-error>
+    </mat-form-field>
+    <mat-dialog-actions align="center">
+      <button mat-button mat-dialog-close>Cerrar</button>
+      <button mat-button (click)="userForm.reset()">Limpiar</button>
+      <button mat-button type="submit">{{ titleButton }}</button>
+    </mat-dialog-actions>
+  </form>
+</mat-dialog-content>

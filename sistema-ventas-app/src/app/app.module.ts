@@ -11,7 +11,10 @@ import { MaterialModule } from './material.module';
 import { HeaderComponent } from './shared/components/header/header.component';
 import { FooterComponent } from './shared/components/footer/footer.component';
 import { SidebarComponent } from './shared/components/sidebar/sidebar.component';
-import { provideHttpClient, withFetch } from '@angular/common/http';
+import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
+import { NgxSpinnerModule } from 'ngx-spinner';
+import { loadingInterceptor } from './shared/interceptors/loading.interceptor';
+import { tokenInterceptor } from './shared/interceptors/token.interceptor';
 
 @NgModule({
   declarations: [
@@ -20,12 +23,13 @@ import { provideHttpClient, withFetch } from '@angular/common/http';
     FooterComponent,
     SidebarComponent,
   ],
-  imports: [BrowserModule, AppRoutingModule, MaterialModule],
+  imports: [BrowserModule, AppRoutingModule, MaterialModule, NgxSpinnerModule],
   providers: [
     provideClientHydration(),
     provideAnimationsAsync(),
-    provideHttpClient(withFetch()),
+    provideHttpClient(withFetch(),
+      withInterceptors([loadingInterceptor, tokenInterceptor]))
   ],
   bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule { }

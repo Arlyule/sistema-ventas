@@ -10,31 +10,37 @@ import { AuthService } from '../services/auth.service';
   styleUrl: './login.component.scss',
 })
 export class LoginComponent implements OnInit, OnDestroy {
-  private destroy$ = new Subject<any>();
 
   hide = true;
+
+  private destroy$ = new Subject<any>();
+
   loginForm = this.fb.group({
     username: ['', [Validators.required, Validators.minLength(3)]],
-    password: ['', [Validators.required, Validators.minLength(3)]],
+    password: ['', [Validators.required, Validators.minLength(3)]]
   });
 
-  constructor(
-    private fb: FormBuilder,
-    public baseForm: BaseForm,
-    private authSvc: AuthService
-  ) { }
+  constructor(private fb: FormBuilder, public baseForm: BaseForm, private authSvc: AuthService) { }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {
 
-  onLogin() {
-    if (this.loginForm.invalid) return;
+  }
 
-    const form = this.loginForm.value;
+  onlogin() {
+    // Verificar que el formulario es correcto
+    if (this.loginForm.invalid) return
 
+    // TODO: Obtener información del formulario
+    // TODO y almecenarla en ima variable form
+    const form = this.loginForm.value
+    console.log('Data: ' + form)
+
+    // TODO: Ejecutar el servicio para obtener los datos
     this.authSvc.login(form).pipe(takeUntil(this.destroy$)).subscribe();
   }
 
   ngOnDestroy(): void {
+    console.log('Metdodo Ondestroy');
     this.destroy$.next({});
     this.destroy$.complete();
   }

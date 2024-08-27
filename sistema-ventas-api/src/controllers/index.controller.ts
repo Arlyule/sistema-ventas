@@ -7,19 +7,6 @@ class IndexController {
 
     public async index(req: Request, res: Response) {
         try {
-            // return res.json({ message: "API Works" });
-            // const user = {
-            //     nombre: "Samuel",
-            //     apellidos: "Torres",
-            //     username: "samuel01",
-            //     password: "linux",
-
-            // };
-            // const token = utils.generateJWT(user);
-            // console.log(token);
-            // var jwt = 'eyJhbGciOiJIUzI1NiIsInR5 cCI6IkpXVCJ9.eyJub21icmUiOiJTYW11ZWwiLCJhcGVsbGlkb3MiOiJUb3JyZXMiLCJ1c2VybmFtZSI6InNhbXVlbDAxIiwicGFzc3dvcmQiOiJsaW51eCIsImlhdCI6MTcyMDIyODIwOCwiZXhwIjoxNzIwMjMxODA4fQ.ZHvIiGU0ye_obLNrwaV8VDmytL_URDRmouoByDX0AcQ'
-            // var data = utils.getPayload(jwt);
-            // console.log(data);
             return res.json({ message: 'API Works!' });
         } catch (error: any) {
             return res.status(500).json({ message: `Error ${error.message}` });

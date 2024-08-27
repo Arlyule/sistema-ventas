@@ -20,10 +20,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
   data: any = {};
   private destroy$ = new Subject<any>();
 
-  constructor(private authSvc: AuthService) {}
+  constructor(private authSvc: AuthService) { }
 
   ngOnInit(): void {
-    // * Obtener la variale para indicar si tiene una sesión.
+    // Obtener la variale para indicar si tiene una sesión.
     this.authSvc.isLogged$
       .pipe(takeUntil(this.destroy$))
       .subscribe((isLogged: boolean) => {
@@ -31,7 +31,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
         console.log('IsLogged', this.isLogged);
       });
 
-    //* Obtener información del usuario.
+    //Obtener información del usuario.
     this.authSvc.tokenData$
       .pipe(takeUntil(this.destroy$))
       .subscribe((data: any) => {
